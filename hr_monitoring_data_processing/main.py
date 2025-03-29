@@ -23,14 +23,15 @@ def run(filename: str) -> None:
     data = []
 
     # open file using file I/O and read it into the `data` list
-    file_path = filename
-    with open(file_path, 'r') as read_file:
-        for item in read_file:
-            data.append(item)
+    file_path = filename 
+    with open(file_path) as read_file:
+            for item in read_file:
+                data.append(item.strip())
     # Use `filter_nondigits` to clean the data and remove invalid entries, save the output to a new variable
     filtered_data = filter_nondigits(data)
-    print(filter_nondigits(data))
-
+    if not filtered_data:
+            print(f"Warning: No valid data found in {filename}!")
+            return None
     # plot this data to explore changes in heart rate for this file, save this visualization to the "images" folder
     x = list(range(1,len(filtered_data)+1))
     y = filtered_data
@@ -39,12 +40,12 @@ def run(filename: str) -> None:
     file_name = f"{image_file}.png"
     image_path = f"images/{file_name}"
     plt.savefig(image_path)
-    plt.close()
+
 
     # calculate the average, maximum, and standard deviation of this file using the functions you've wrote
-    avg_hr = average(filtered_data)
+    avg_hr = round(average(filtered_data), 2)
     max_hr = maximum(filtered_data)
-    std_dev_hr = standard_deviation(filtered_data)
+    std_dev_hr = round(standard_deviation(filtered_data), 2)
 
     # return all 3 values
     return avg_hr, max_hr, std_dev_hr
